@@ -72,10 +72,14 @@ export const getTagFromName = async (
 ): Promise<Tag | null> => {
   await maybeSetSupabaseClientSession(request);
   const res = await supabaseClient
-    .from<Tag>("tag")
+    .from<Tag>("tags")
     .select("*")
     .eq("name", name)
     .single();
+
+  if (res.error) {
+    throw new Error(res.error.message);
+  }
 
   return res.data;
 };
