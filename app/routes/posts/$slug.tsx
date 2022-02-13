@@ -1,31 +1,59 @@
-import { LoaderFunction, useLoaderData } from "remix";
-import { supabaseClient } from "~/supabase.server";
-import { Post } from "~/types";
+import { marked } from "marked";
+import { LoaderFunction, MetaFunction, useLoaderData } from "remix";
+import { Post } from "~/components/post";
+import { formatDateString } from "~/utils/extra.server";
+import { getPostFromSlug } from "~/utils/db.server";
+import { supabaseStrategy } from "~/auth.server";
 
 type LoaderData = {
-  post: Post;
+  isSameUser: boolean;
+  slug: string;
+  title: string;
+  createdAt: string;
+  html: string;
 };
 
-export const loader: LoaderFunction = async ({ params }) => {
-  const data = await supabaseClient
-    .from("post")
-    .select("*")
-    .eq("slug", params.slug)
-    .single();
-  const post = data?.body;
-  console.log(params);
-  console.log(data);
+export const meta: MetaFunction = ({
+  data,
+}: {
+  data: LoaderData | undefined;
+}) => {
+  return data
+    ? {
+        title: `${data.title} | mattias.codes`,
+        description: `Reading post titled ${data.title}`,
+      }
+    : { title: "No post here :(", description: `You're on a sad page :(` };
+};
 
+export const loader: LoaderFunction = async ({
+  request,
+  params,
+}): Promise<LoaderData> => {
+  const session = await supabaseStrategy.checkSession(request);
+  const post = await getPostFromSlug(request, params?.slug || "");
+  if (!post) {
+    throw new Response("oh no", { status: 404 });
+  }
   return {
-    post: post,
+    slug: post.slug,
+    isSameUser: session?.user?.id === post.userId,
+    title: post.title,
+    createdAt: formatDateString(post.createdAt),
+    html: post.html,
   };
 };
 
-export default function Post() {
-  const { post } = useLoaderData<LoaderData>();
+export default function PostPage() {
+  const { title, createdAt, html, slug, isSameUser } =
+    useLoaderData<LoaderData>();
   return (
-    <article>
-      <h2>{post.title}</h2>
-    </article>
+    <Post
+      slug={slug}
+      title={title}
+      createdAt={createdAt}
+      html={html}
+      isSameUser={isSameUser}
+    />
   );
 }

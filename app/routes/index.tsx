@@ -1,29 +1,74 @@
-import { Link, LoaderFunction, useLoaderData } from "remix";
-import { supabaseClient } from "~/supabase.server";
+import {
+  ActionFunction,
+  Form,
+  Link,
+  LoaderFunction,
+  useLoaderData,
+} from "remix";
+import { authenticator, supabaseStrategy } from "~/auth.server";
+import { Tag } from "~/types";
+import { getPostsTitleList, getTags } from "~/utils/db.server";
 
-type LoaderData = {
-  posts: { slug: string; title: string }[];
-  error: { message: string } | null;
+export const action: ActionFunction = async ({ request }) => {
+  await authenticator.logout(request, { redirectTo: "." });
 };
 
-export const loader: LoaderFunction = async () => {
-  const data = await supabaseClient.from("post").select("title, slug");
+type LoaderData = {
+  posts: { slug: string; title: string; published: boolean }[];
+  tags: Tag[];
+  authenticated: boolean;
+};
 
-  console.log(data);
+export const loader: LoaderFunction = async ({
+  request,
+}): Promise<LoaderData> => {
+  const posts = await getPostsTitleList(request);
+  const tags = await getTags(request);
+  const session = await supabaseStrategy.checkSession(request);
 
-  return { posts: data.data };
+  return { tags, posts, authenticated: !!session };
 };
 
 export default function Index() {
-  const { posts } = useLoaderData<LoaderData>();
+  const { posts, authenticated, tags } = useLoaderData<LoaderData>();
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
+    <div>
       <h1>Welcome to Remix</h1>
+      <section>
+        {authenticated ? (
+          <Form method="post">
+            <button>Log Out</button>
+          </Form>
+        ) : (
+          <Link to="/login">Login</Link>
+        )}
+      </section>
       <ul>
+        Posts:
         {posts.map((post) => {
           return (
             <li key={post.slug}>
-              <Link to={`/posts/${post.slug}`}>{post.title}</Link>
+              <Link prefetch="intent" to={`/posts/${post.slug}`}>
+                {post.title}
+                {!post.published ? " (draft)" : null}
+              </Link>
+            </li>
+          );
+        })}
+        {authenticated ? (
+          <li>
+            <Link to="/posts/add">Add new post</Link>
+          </li>
+        ) : null}
+      </ul>
+      <ul>
+        Tags:
+        {tags.map((tag) => {
+          return (
+            <li key={tag.name}>
+              <Link prefetch="intent" to={`/tags/${tag.name}`}>
+                {tag.name} ({tag.count})
+              </Link>
             </li>
           );
         })}

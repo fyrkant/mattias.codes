@@ -8,7 +8,7 @@ type LoaderData = {
 
 export const action: ActionFunction = async ({ request }) => {
   await authenticator.authenticate("sb", request, {
-    successRedirect: "/private",
+    successRedirect: "/",
     failureRedirect: "/login",
   });
 };
@@ -45,9 +45,6 @@ export default function Screen() {
         <input type="password" name="password" id="password" />
       </div>
 
-      <button name="button" value="signup">
-        Sign up
-      </button>
       <button>Log In</button>
     </Form>
   );

@@ -11,11 +11,11 @@ if (!sessionSecret) {
 
 export const sessionStorage = createCookieSessionStorage({
   cookie: {
-    name: "sb",
+    name: "sb_session",
     httpOnly: true,
     path: "/",
     sameSite: "lax",
-    secrets: [sessionSecret], // This should be an env variable
+    secrets: [sessionSecret],
     secure: process.env.NODE_ENV === "production",
   },
 });
@@ -24,7 +24,7 @@ export const supabaseStrategy = new SupabaseStrategy(
   {
     supabaseClient,
     sessionStorage,
-    sessionKey: "sb:session", // if not set, default is sb:session
+    sessionKey: "accessToken", // if not set, default is sb:session
     sessionErrorKey: "sb:error", // if not set, default is sb:error
   },
   // simple verify example for email/password auth
@@ -41,16 +41,23 @@ export const supabaseStrategy = new SupabaseStrategy(
     if (typeof password !== "string")
       throw new AuthorizationError("Password must be a string");
 
-    return supabaseClient.auth.api
-      .signInWithEmail(email, password)
-      .then(({ data, error }): Session => {
-        if (error || !data)
+    const session = await supabaseClient.auth
+      .signIn({ email, password })
+      .then(({ session, error }): Session => {
+        if (error || !session)
           throw new AuthorizationError(
             error?.message ?? "No user session found"
           );
 
-        return data;
+        return session;
       });
+
+    // if (session?.access_token) {
+    //   const s = await sessionStorage.getSession();
+    //   s.set("accessToken", session.access_token);
+    // }
+
+    return session;
   }
 );
 
