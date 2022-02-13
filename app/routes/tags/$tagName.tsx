@@ -9,7 +9,7 @@ import { getPostsWithTag, getTagFromName } from "~/utils/db.server";
 import { Tag, Post as IPost } from "~/types";
 
 type LoaderData = {
-  tag: Tag;
+  tag: string;
   posts: IPost[];
 };
 
@@ -30,13 +30,10 @@ export const loader: LoaderFunction = async ({
   request,
   params,
 }): Promise<LoaderData> => {
-  const tag = await getTagFromName(request, params?.tagName || "");
-  if (!tag) {
-    throw new Response("oh no", { status: 404 });
-  }
-  const posts = await getPostsWithTag(request, tag.name);
+  const tagName = params?.tagName || "";
+  const posts = await getPostsWithTag(request, tagName);
   return {
-    tag,
+    tag: tagName,
     posts,
   };
 };
@@ -45,8 +42,8 @@ export default function PostPage() {
   const { tag, posts } = useLoaderData<LoaderData>();
   return (
     <section>
-      <h2>{tag.name}</h2>
-      Posts tagged with {tag.name}:
+      <h2>{tag}</h2>
+      Posts tagged with {tag}:
       <ul>
         {posts.map((post) => (
           <li key={post.slug}>

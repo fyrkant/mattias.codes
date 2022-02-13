@@ -22,11 +22,16 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({
   request,
 }): Promise<LoaderData> => {
-  const posts = await getPostsTitleList(request);
-  const tags = await getTags(request);
-  const session = await supabaseStrategy.checkSession(request);
+  const postsPromise = getPostsTitleList(request);
+  const tagsPromise = getTags(request);
 
-  return { tags, posts, authenticated: !!session };
+  const sessionPromise = supabaseStrategy.checkSession(request);
+
+  return {
+    tags: await tagsPromise,
+    posts: await postsPromise,
+    authenticated: !!(await sessionPromise),
+  };
 };
 
 export default function Index() {

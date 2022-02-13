@@ -30,8 +30,10 @@ export const loader: LoaderFunction = async ({
   request,
   params,
 }): Promise<LoaderData> => {
-  const session = await supabaseStrategy.checkSession(request);
-  const post = await getPostFromSlug(request, params?.slug || "");
+  const [session, post] = await Promise.all([
+    supabaseStrategy.checkSession(request),
+    getPostFromSlug(request, params?.slug || ""),
+  ]);
   if (!post) {
     throw new Response("oh no", { status: 404 });
   }

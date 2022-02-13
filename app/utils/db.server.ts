@@ -34,7 +34,6 @@ async function doAddPost(request: Request, prevSlug?: string): Promise<string> {
 
   try {
     if (!!prevSlug) {
-      console.log({ p, prevSlug });
       const r = await supabaseClient
         .from("post")
         .update(p)
@@ -91,7 +90,6 @@ export const getTags = async (request: Request): Promise<Tag[]> => {
   if (res.error) {
     throw new Error(res.error.message);
   }
-  console.log(res.data);
   return res.data || [];
 };
 
@@ -113,7 +111,6 @@ export async function getPostsTitleList(
   if (res.error) {
     throw new Error(res.error.message);
   }
-  console.log(res.data);
 
   return res.data || [];
 }
