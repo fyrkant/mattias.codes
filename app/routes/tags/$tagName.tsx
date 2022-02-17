@@ -20,8 +20,8 @@ export const meta: MetaFunction = ({
 }) => {
   return data
     ? {
-        title: `${data.tag.name} | mattias.codes`,
-        description: `Reading post titled ${data.tag.name}`,
+        title: `${data.tag} | mattias.codes`,
+        description: `Listing posts tagged with: ${data.tag}`,
       }
     : { title: "No tag here :(", description: `You're on a sad page :(` };
 };
