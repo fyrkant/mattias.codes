@@ -11,6 +11,7 @@ type LoaderData = {
   title: string;
   createdAt: string;
   html: string;
+  tags: string[];
 };
 
 export const meta: MetaFunction = ({
@@ -41,18 +42,20 @@ export const loader: LoaderFunction = async ({
     slug: post.slug,
     isSameUser: session?.user?.id === post.userId,
     title: post.title,
+    tags: post.tags,
     createdAt: formatDateString(post.createdAt),
     html: post.html,
   };
 };
 
 export default function PostPage() {
-  const { title, createdAt, html, slug, isSameUser } =
+  const { title, createdAt, html, slug, isSameUser, tags } =
     useLoaderData<LoaderData>();
   return (
     <Post
       slug={slug}
       title={title}
+      tags={tags}
       createdAt={createdAt}
       html={html}
       isSameUser={isSameUser}

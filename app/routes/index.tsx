@@ -38,7 +38,7 @@ export default function Index() {
   const { posts, authenticated, tags } = useLoaderData<LoaderData>();
   return (
     <div>
-      <h1>Welcome to Remix</h1>
+      <h1>mattias.codes</h1>
       <section>
         {authenticated ? (
           <Form method="post">
