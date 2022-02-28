@@ -6,6 +6,7 @@ import {
   useLoaderData,
 } from "remix";
 import { authenticator, supabaseStrategy } from "~/auth.server";
+import { styled } from "~/stitches.config";
 import { Tag } from "~/types";
 import { getPostsTitleList, getTags } from "~/utils/db.server";
 
@@ -33,6 +34,11 @@ export const loader: LoaderFunction = async ({
     authenticated: !!(await sessionPromise),
   };
 };
+
+const Tag = styled("li", {
+  color: "$superCool",
+  fontSize: "2rem",
+});
 
 export default function Index() {
   const { posts, authenticated, tags } = useLoaderData<LoaderData>();
@@ -70,11 +76,11 @@ export default function Index() {
         Tags:
         {tags.map((tag) => {
           return (
-            <li key={tag.name}>
+            <Tag key={tag.name}>
               <Link prefetch="intent" to={`/tags/${tag.name}`}>
                 {tag.name} ({tag.count})
               </Link>
-            </li>
+            </Tag>
           );
         })}
       </ul>

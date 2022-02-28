@@ -10,6 +10,7 @@ import {
 } from "remix";
 import type { MetaFunction } from "remix";
 import stylesUrl from "~/styles/root.css";
+import { getCssText } from "./stitches.config";
 
 export const meta: MetaFunction = () => {
   return {
@@ -19,11 +20,13 @@ export const meta: MetaFunction = () => {
 };
 
 export const links: LinksFunction = () => {
+  console.log(stylesUrl);
   return [
     {
       rel: "stylesheet",
       href: stylesUrl,
     },
+    { rel: "stylesheet", href: "styles.css" },
   ];
 };
 
