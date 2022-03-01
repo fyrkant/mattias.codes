@@ -35,7 +35,7 @@ export const loader: LoaderFunction = async ({
   };
 };
 
-const Tag = styled("li", {
+const TagComponent = styled("li", {
   color: "$superCool",
   fontSize: "2rem",
 });
@@ -76,11 +76,11 @@ export default function Index() {
         Tags:
         {tags.map((tag) => {
           return (
-            <Tag key={tag.name}>
+            <TagComponent key={tag.name}>
               <Link prefetch="intent" to={`/tags/${tag.name}`}>
                 {tag.name} ({tag.count})
               </Link>
-            </Tag>
+            </TagComponent>
           );
         })}
       </ul>
