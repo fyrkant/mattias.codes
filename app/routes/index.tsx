@@ -51,7 +51,6 @@ export default function Index() {
       <ul>
         Posts:
         {posts.map((post) => {
-          console.log(post);
           return (
             <li key={post.slug}>
               <Link prefetch="intent" to={`/posts/${post.slug}`}>
