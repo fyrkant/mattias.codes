@@ -5,7 +5,6 @@ import {
   redirect,
   useLoaderData,
 } from "remix";
-import invariant from "tiny-invariant";
 import { supabaseStrategy } from "~/auth.server";
 import stylesUrl from "~/styles/add.css";
 import { editPost, getPostFromSlug } from "~/utils/db.server";

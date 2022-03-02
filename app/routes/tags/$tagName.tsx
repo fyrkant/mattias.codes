@@ -5,8 +5,8 @@ import {
   useLoaderData,
   useParams,
 } from "remix";
-import { getPostsWithTag, getTagFromName } from "~/utils/db.server";
-import { Tag, Post as IPost } from "~/types";
+import { getPostsWithTag } from "~/utils/db.server";
+import { Post as IPost } from "~/types";
 
 type LoaderData = {
   tag: string;

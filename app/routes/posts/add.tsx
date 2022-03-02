@@ -1,10 +1,4 @@
-import {
-  ActionFunction,
-  Form,
-  LinksFunction,
-  LoaderFunction,
-  redirect,
-} from "remix";
+import { ActionFunction, LinksFunction, LoaderFunction, redirect } from "remix";
 import { supabaseStrategy } from "~/auth.server";
 import stylesUrl from "~/styles/add.css";
 import { PostForm } from "~/components/post-form";

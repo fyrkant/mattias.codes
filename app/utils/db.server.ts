@@ -33,7 +33,7 @@ async function doAddPost(request: Request, prevSlug?: string): Promise<string> {
   };
 
   try {
-    if (!!prevSlug) {
+    if (prevSlug) {
       const r = await supabaseClient
         .from("post")
         .update(p)

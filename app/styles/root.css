@@ -1,4 +1,8 @@
 /*
+  Reset from Josh W Comeau
+  https://www.joshwcomeau.com/css/custom-css-reset/
+ */
+/*
   1. Use a more-intuitive box-sizing model.
 */
 *,
@@ -59,4 +63,30 @@ h4,
 h5,
 h6 {
   overflow-wrap: break-word;
+}
+
+/* Reset end */
+
+:root {
+  /* CSS HSL */
+  --gainsboro: hsla(192, 13%, 85%, 1);
+  --beau-blue: hsla(205, 50%, 79%, 1);
+  --umber: hsla(30, 10%, 34%, 1);
+  --black-coffee: hsla(312, 9%, 21%, 1);
+  --middle-grey: hsla(38, 3%, 52%, 1);
+
+  --color-links: var(--black-coffee);
+}
+
+body {
+  /* font-family: var(--font-body); */
+  line-height: 1.5;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  min-height: calc(100vh - env(safe-area-inset-bottom));
+}
+
+a {
+  color: var(--color-links);
+  text-decoration: none;
 }

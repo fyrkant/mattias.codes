@@ -1,4 +1,3 @@
-import { marked } from "marked";
 import { LoaderFunction, MetaFunction, useLoaderData } from "remix";
 import { Post } from "~/components/post";
 import { formatDateString } from "~/utils/extra.server";

@@ -24,7 +24,7 @@ export function PostForm({ editingPost }: Props) {
   return (
     <div className="add-container">
       <section>
-        <h2>{!!editingPost ? "Edit post" : "Add new post"}</h2>
+        <h2>{editingPost ? "Edit post" : "Add new post"}</h2>
         <Form method="post">
           <label htmlFor="title">Title</label>
           <input
@@ -60,7 +60,7 @@ export function PostForm({ editingPost }: Props) {
             }}
           />
 
-          <button>{!!editingPost ? "Edit" : "Add"}</button>
+          <button>{editingPost ? "Edit" : "Add"}</button>
         </Form>
       </section>
       <div
