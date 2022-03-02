@@ -10,6 +10,7 @@ export default function handleRequest(
 ) {
   // This redirects users from HTTP to HTTPS
   const proto = request.headers.get("X-Forwarded-Proto");
+
   if (proto === "http") {
     const u = new URL(request.url);
     u.protocol = "https";

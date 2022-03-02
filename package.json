@@ -4,11 +4,11 @@
   "description": "",
   "license": "",
   "scripts": {
-    "build": "cross-env NODE_ENV=production remix build",
+    "build": "NODE_ENV=production remix build",
     "deploy": "fly deploy --remote-only",
-    "dev": "cross-env NODE_ENV=development remix dev",
+    "dev": "NODE_ENV=development remix dev",
     "link": "eslint app --ext .ts --ext .tsx",
-    "start": "cross-env NODE_ENV=production remix-serve build",
+    "start": "NODE_ENV=production remix-serve build",
     "postinstall": "remix setup node"
   },
   "dependencies": {
